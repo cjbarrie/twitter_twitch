@@ -1,0 +1,52 @@
+---
+title: "academictwitteR Twitch talk"
+subtitle: ""  
+author: 
+  - "Christopher Barrie and Justin Chun-ting Ho"
+date: 2021-05-20
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_mono_light(base_color = "#f5f5f5",text_color = "#585858", header_color = "#8b0000",text_bold_color = "#585858",link_color = "#8b0000", title_slide_text_color = "#585858",inverse_text_color = "#585858",inverse_header_color = "#585858",
+                   header_font_google = google_font("Quattrocento Sans"),
+                 text_font_google   = google_font("Quattrocento Sans"),
+                 code_font_google   = google_font("Quattrocento Sans"),
+                 header_h1_font_size = "2rem",
+                 text_font_size = "1.5rem")
+```
+
+class: inverse, center, middle
+
+# Intro
+
+---
+
+# Structure of intro. talk
+
+- Data storage
+
+- Convenience
+
+- Query building
+
+---
+
+# Installation
+
+```{r}
+
+library(academictwitteR)
+```
