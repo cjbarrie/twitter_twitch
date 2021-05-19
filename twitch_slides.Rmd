@@ -20,7 +20,7 @@ options(htmltools.dir.version = FALSE)
 
 ```{r xaringan-themer, include=FALSE, warning=FALSE}
 library(xaringanthemer)
-style_mono_light(base_color = "#f5f5f5",text_color = "#585858", header_color = "#8b0000",text_bold_color = "#585858",link_color = "#8b0000", title_slide_text_color = "#585858",inverse_text_color = "#585858",inverse_header_color = "#585858",
+style_mono_light(base_color = "#f5f5f5",text_color = "#585858", header_color = "#8b0000",text_bold_color = "#585858",link_color = "#8b0000", title_slide_text_color = "#585858",inverse_text_color = "#585858",inverse_header_color = "#585858", code_inline_color = "#585858",
                    header_font_google = google_font("Quattrocento Sans"),
                  text_font_google   = google_font("Quattrocento Sans"),
                  code_font_google   = google_font("Quattrocento Sans"),
@@ -36,17 +36,286 @@ class: inverse, center, middle
 
 # Structure of intro. talk
 
+- Installation and authorization
+
 - Data storage
 
-- Convenience
+- Convenience functions
 
 - Query building
 
 ---
 
-# Installation
+# Installation and authorization
 
 ```{r}
 
 library(academictwitteR)
+
+```
+
+OR
+
+```{r, eval = F}
+
+devtools::install_github("cjbarrie/academictwitteR", build_vignettes = T)
+
+```
+
+Authorization instructions available as [CRAN vignette](https://cran.r-project.org/web/packages/academictwitteR/vignettes/academictwitteR-auth.html).
+
+---
+background-image: url("figs/twitterdev6.png")
+background-size: contain
+background-color: #FFFFFF
+class: center, bottom, inverse
+---
+
+# Installation and authorization
+
+```{r, eval= F}
+
+bearer_token <- "" # Insert bearer token
+
+```
+
+---
+
+# Data storage
+
+1. Storage in .rds format
+2. Returned as `data.frame` object
+
+```{r, eval=F}
+
+tweets <-
+  get_all_tweets(
+    "#BLM OR #BlackLivesMatter",
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token,
+    file = "blmtweets"
+  )
+
+
+```
+
+---
+
+# Data storage
+
+1. Storage in JSON format
+2. In named directory
+3. Recovery functions
+4. Bind functions
+
+```{r, eval=F}
+
+# Note: not passing to an object because nothing returned 
+
+get_all_tweets(
+    "#BLM OR #BlackLivesMatter",
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token,
+    data_path = "data/"
+    bind_tweets = FALSE
+  )
+
+```
+
+---
+
+# Data storage
+
+```{r, eval=F}
+
+resume_collection(data_path = "data", bearer_token)
+
+```
+
+---
+
+# Data storage
+
+```{r, eval=F}
+
+update_collection(data_path = "data", end_tweets = "2020-01-10T00:00:00Z", bearer_token)
+
+```
+
+---
+
+# Data storage
+
+```{r, eval=F}
+
+tweets <- bind_tweet_jsons(data_path = "data/")
+
+```
+
+---
+
+# Main functions
+
+## Getting tweets
+
+
+```{r, eval=F}
+
+tweets <-
+  get_all_tweets(
+    "#BLM OR #BlackLivesMatter",
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token,
+    data_path = "data/"
+    bind_tweets = FALSE
+  )
+
+
+```
+
+---
+
+# Main functions
+
+## Getting user tweets
+
+
+```{r, eval=F}
+
+users <- c("TwitterDev", "jack")
+tweets <-
+  get_user_tweets(
+    users,
+    "2010-01-01T00:00:00Z",
+    "2020-01-01T00:00:00Z",
+    bearer_token,
+    data_path = "data/"
+    bind_tweets = FALSE
+  )
+
+```
+
+---
+
+# Convenience functions
+
+## Getting image tweets 
+
+```{r, eval=F}
+
+tweets <-
+  get_image_tweets(
+    "#BLM OR #BlackLivesMatter",
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token,
+    data_path = "data/"
+    bind_tweets = FALSE
+  )
+
+```
+
+---
+
+# Convenience functions
+
+## Getting video tweets
+
+```{r, eval=F}
+
+tweets <-
+  get_video_tweets(
+    "#BLM OR #BlackLivesMatter",
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token,
+    data_path = "data/"
+    bind_tweets = FALSE
+  )
+
+```
+
+---
+
+# Query building
+
+## Building manually
+
+```{r, eval=F}
+
+tweets <-
+  get_all_tweets(
+    "#BLM OR #BlackLivesMatter place_country:US lang:en -is:retweet has:images",
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token
+  )
+
+```
+
+---
+background-image: url("figs/seattle.png")
+background-size: contain
+background-color: #FFFFFF
+class: center, bottom, inverse
+---
+
+# Query building
+
+## Building manually
+
+```{r, eval=F}
+
+
+tweets <-
+  get_all_tweets(
+    "#BLM OR #BlackLivesMatter bounding_box:[-122.375679 47.563554 -122.266159 47.643417] lang:en -is:retweet has:images",
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token
+  )
+
+```
+
+---
+
+# Query building
+
+## Using query builder
+
+```{r, eval=F}
+
+query <- build_query(query = "#BLM", geo_query = TRUE)
+
+```
+
+```
+Which geo buffer type type do you want? 
+
+1: Point radius
+2: Bounding box
+```
+
+```
+Selection: 2
+What is west longitude? -122.375679
+What is south latitude? 47.563554
+What is east longitude? -122.266159
+What is north latitude? 47.643417
+
+```
+
+```{r, echo=F}
+query <-
+  "#BLM -is:retweet bounding_box:[-122.375679 47.563554 -122.266159 47.643417] has:images lang:en"
+
+```
+
+And we get:
+
+```{r}
+query
 ```

@@ -31,19 +31,271 @@ class: inverse, center, middle
 
 # Structure of intro. talk
 
+- Installation and authorization
+
 - Data storage
 
-- Convenience
+- Convenience functions
 
 - Query building
 
 ---
 
-# Installation
+# Installation and authorization
 
 
 ```r
 library(academictwitteR)
+```
+
+OR
+
+
+```r
+devtools::install_github("cjbarrie/academictwitteR", build_vignettes = T)
+```
+
+Authorization instructions available as [CRAN vignette](https://cran.r-project.org/web/packages/academictwitteR/vignettes/academictwitteR-auth.html).
+
+---
+background-image: url("figs/twitterdev6.png")
+background-size: contain
+background-color: #FFFFFF
+class: center, bottom, inverse
+---
+
+# Installation and authorization
+
+
+```r
+bearer_token &lt;- "" # Insert bearer token
+```
+
+---
+
+# Data storage
+
+1. Storage in .rds format
+2. Returned as `data.frame` object
+
+
+```r
+tweets &lt;-
+  get_all_tweets(
+    "#BLM OR #BlackLivesMatter",
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token,
+    file = "blmtweets"
+  )
+```
+
+---
+
+# Data storage
+
+1. Storage in JSON format
+2. In named directory
+3. Recovery functions
+4. Bind functions
+
+
+```r
+# Note: not passing to an object because nothing returned 
+
+get_all_tweets(
+    "#BLM OR #BlackLivesMatter",
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token,
+    data_path = "data/"
+    bind_tweets = FALSE
+  )
+```
+
+---
+
+# Data storage
+
+
+```r
+resume_collection(data_path = "data", bearer_token)
+```
+
+---
+
+# Data storage
+
+
+```r
+update_collection(data_path = "data", end_tweets = "2020-01-10T00:00:00Z", bearer_token)
+```
+
+---
+
+# Data storage
+
+
+```r
+tweets &lt;- bind_tweet_jsons(data_path = "data/")
+```
+
+---
+
+# Main functions
+
+## Getting tweets
+
+
+
+```r
+tweets &lt;-
+  get_all_tweets(
+    "#BLM OR #BlackLivesMatter",
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token,
+    data_path = "data/"
+    bind_tweets = FALSE
+  )
+```
+
+---
+
+# Main functions
+
+## Getting user tweets
+
+
+
+```r
+users &lt;- c("TwitterDev", "jack")
+tweets &lt;-
+  get_user_tweets(
+    users,
+    "2010-01-01T00:00:00Z",
+    "2020-01-01T00:00:00Z",
+    bearer_token,
+    data_path = "data/"
+    bind_tweets = FALSE
+  )
+```
+
+---
+
+# Convenience functions
+
+## Getting image tweets 
+
+
+```r
+tweets &lt;-
+  get_image_tweets(
+    "#BLM OR #BlackLivesMatter",
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token,
+    data_path = "data/"
+    bind_tweets = FALSE
+  )
+```
+
+---
+
+# Convenience functions
+
+## Getting video tweets
+
+
+```r
+tweets &lt;-
+  get_video_tweets(
+    "#BLM OR #BlackLivesMatter",
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token,
+    data_path = "data/"
+    bind_tweets = FALSE
+  )
+```
+
+---
+
+# Query building
+
+## Building manually
+
+
+```r
+tweets &lt;-
+  get_all_tweets(
+    "#BLM OR #BlackLivesMatter place_country:US lang:en -is:retweet has:images",
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token
+  )
+```
+
+---
+background-image: url("figs/seattle.png")
+background-size: contain
+background-color: #FFFFFF
+class: center, bottom, inverse
+---
+
+# Query building
+
+## Building manually
+
+
+```r
+tweets &lt;-
+  get_all_tweets(
+    "#BLM OR #BlackLivesMatter bounding_box:[-122.375679 47.563554 -122.266159 47.643417] lang:en -is:retweet has:images",
+    "2020-01-01T00:00:00Z",
+    "2020-01-05T00:00:00Z",
+    bearer_token
+  )
+```
+
+---
+
+# Query building
+
+## Using query builder
+
+
+```r
+query &lt;- build_query(query = "#BLM", geo_query = TRUE)
+```
+
+```
+Which geo buffer type type do you want? 
+
+1: Point radius
+2: Bounding box
+```
+
+```
+Selection: 2
+What is west longitude? -122.375679
+What is south latitude? 47.563554
+What is east longitude? -122.266159
+What is north latitude? 47.643417
+
+```
+
+
+
+And we get:
+
+
+```r
+query
+```
+
+```
+## [1] "#BLM -is:retweet bounding_box:[-122.375679 47.563554 -122.266159 47.643417] has:images lang:en"
 ```
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
