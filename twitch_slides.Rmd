@@ -314,8 +314,6 @@ query <-
 
 ```
 
-And we get:
-
 ```{r}
 query
 ```
