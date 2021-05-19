@@ -34,15 +34,16 @@ View(search_tweets)
 # Note some of the RT texts are truncated
 head(search_tweets$text)
 
-search_tweets$referenced_tweets[4]
+search_tweets$referenced_tweets[[4]]
 
 
 
 #######################  Getting Usernames ####################### 
 
 # Note the function only returns user ID (but not screen name etc)
-authors <- search_tweets$author_id[1:10]
-authors_profile <- get_user_profile(authors, bearer_token)
+search_tweets$author_id
+
+authors_profile <- get_user_profile(search_tweets$author_id[1:10], bearer_token)
 names(authors_profile)
 
 
@@ -54,7 +55,7 @@ build_query("#Covid", is_retweet = FALSE, has_images = TRUE)
 # you can read the documentation here
 ?build_query
 
-# arguments can be passed directly to
+# arguments can be passed directly to the build_query() function from get_all_tweets()
 search_tweets <- get_all_tweets("#Covid",
                                 "2020-05-18T09:00:00Z",
                                 "2020-05-18T09:10:00Z",
@@ -94,3 +95,18 @@ resume_collection(data_path = "more_covid_tweets",
                   bind_tweets = FALSE)
 
 search_tweets <- bind_tweet_jsons(data_path = "more_covid_tweets")
+
+View(search_tweets)
+
+
+
+#######################  Vignettes ####################### 
+
+# Authorization for Twitter Academic Research Product Track
+vignette("academictwitteR-auth")
+
+# Basic Introduction
+vignette("academictwitteR-intro")
+
+# Building Queries
+vignette("academictwitteR-build")
